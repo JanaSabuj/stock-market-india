@@ -6,28 +6,36 @@ var BSEAPI = API.BSE;
 var NSEAPI = API.NSE;
 
 var app = express();
-
-app.listen(3000, () => {
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
   console.log("Server running on port 3000");
 });
 
 // National Stock Exchange (NSE) APIS
 
+// USE 
 // Get the stock market status (open/closed) - JSON
 // Example: http://localhost:3000/get_market_status
 app.get("/get_market_status", (req, res, next) => {
   NSEAPI.getMarketStatus()
     .then(function (response) {
-      res.json(response.data);
+      res.status(200).json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
+// USE
 // Get the NSE indexes information (last updated, name, previous close, open, low, high, last, percent change, year high and low, index order) - JSON
 // Example: http://localhost:3000/nse/get_indices
 app.get("/nse/get_indices", (req, res, next) => {
   NSEAPI.getIndices()
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
@@ -37,8 +45,12 @@ app.get("/nse/get_quotes", (req, res, next) => {
   NSEAPI.getQuotes()
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
+
 
 // Get the quotation data of the symbol (companyName) from NSE - JSON
 // Example: http://localhost:3000/nse/get_quote_info?companyName=TCS
@@ -46,24 +58,36 @@ app.get("/nse/get_quote_info", (req, res, next) => {
   NSEAPI.getQuoteInfo(req.query.companyName)
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
+
 });
 
+// USE
 // Get the top 10 gainers of NSE - JSON
 // Example: http://localhost:3000/nse/get_gainers
 app.get("/nse/get_gainers", (req, res, next) => {
   NSEAPI.getGainers()
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
+// USE
 // Get the top 10 losers of NSE - JSON
 // Example: http://localhost:3000/nse/get_losers
 app.get("/nse/get_losers", (req, res, next) => {
   NSEAPI.getLosers()
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
@@ -76,21 +100,29 @@ app.get("/nse/get_incline_decline", (req, res, next) => {
     });
 });
 
+// USE
 // Get the information of all the companies in a single NSE index (slug) JSON
 // Example: http://localhost:3000/nse/get_index_stocks?symbol=nifty
 app.get("/nse/get_index_stocks", (req, res, next) => {
   NSEAPI.getIndexStocks(req.query.symbol)
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
+// USE
 // Get the list of companies in provided NSE index with matching keyword data - JSON
 // Example: http://localhost:3000/nse/search_stocks?keyword=AXIS
 app.get("/nse/search_stocks", (req, res, next) => {
   NSEAPI.searchStocks(req.query.keyword)
-    .then(function (response) {
+    .then(function (response) {      
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
@@ -101,6 +133,9 @@ app.get("/nse/get_intra_day_data", (req, res, next) => {
   NSEAPI.getIntraDayData(req.query.companyName, req.query.time)
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
@@ -110,6 +145,9 @@ app.get("/nse/get_52_week_high", (req, res, next) => {
   NSEAPI.get52WeekHigh()
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
@@ -119,6 +157,9 @@ app.get("/nse/get_52_week_low", (req, res, next) => {
   NSEAPI.get52WeekLow()
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
@@ -128,6 +169,9 @@ app.get("/nse/get_top_value_stocks", (req, res, next) => {
   NSEAPI.getTopValueStocks()
     .then(function (response) {
       res.json(response.data);
+    })
+    .catch((error) => {
+      res.status(404).json({error: error.message})
     });
 });
 
@@ -254,5 +298,10 @@ app.get("/bse/getTopTurnOvers", (req, res, next) => {
       res.json(response.data);
     });
 });
+
+// test
+app.get('/', (req, res) => {
+  res.send('BSE NSE BACKEND FOR VIRTUAL-STONKS IS RUNNING!')
+})
 
 module.exports = app;
